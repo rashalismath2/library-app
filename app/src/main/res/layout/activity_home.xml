@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".HomeActivity">
+
+    <!--Main for all elements-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!--Upper search container-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:orientation="horizontal"
+            android:background="@color/colorPrimary">
+
+           <LinearLayout
+               android:layout_margin="15dp"
+               android:background="#fff"
+               android:layout_marginTop="10dp"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content">
+
+               <ImageView
+                   android:layout_width="60dp"
+                   android:layout_height="50dp"
+                   android:background="@drawable/icon_drawer"/>
+
+               <EditText
+                   android:paddingStart="10dp"
+                   android:layout_marginEnd="10dp"
+                   android:hint="Search books / Author"
+                   android:textColorHint="#000"
+                   android:textSize="20dp"
+                   android:background="#fff"
+
+                   android:layout_width="match_parent"
+                   android:layout_height="50dp" />
+           </LinearLayout>
+
+        </LinearLayout>
+        <!--End of the search container-->
+
+        <!--Start of the popular section-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp">
+
+            <ImageView
+                android:id="@+id/cover_popular"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleX="1.5"
+                android:scaleY="1"
+                android:background="#000"
+                android:src="@drawable/most_popoular"/>
+
+            <TextView
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="50dp"
+                android:layout_marginStart="10dp"
+                android:id="@+id/heading_popular"
+                android:background="#000"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#fff"
+                android:textSize="22dp"
+                android:textStyle="bold"
+                android:text="Popular"
+                />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="10dp"
+                android:layout_marginStart="10dp"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    android:layout_gravity="center|left"
+                    android:id="@+id/title_popular"
+                    android:background="#000"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#fff"
+                    android:textSize="20dp"
+                    android:text="About a consultant detective"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <ImageButton
+                        android:layout_marginEnd="10dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/icon_arrow_forward"
+                        android:background="@drawable/default_round_button"
+                        android:drawable="@drawable/icon_arrow_forward"
+                        />
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+        <!--End of the popular section-->
+
+        <!--start of the tags section-->
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="80dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+
+                <Button
+                    android:layout_margin="10dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="For you"
+                    android:background="@drawable/button_tag"
+                    android:textColor="#fff"/>
+
+                <Button
+                    android:layout_margin="10dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Categories"
+                    android:background="@drawable/button_tag"
+                    android:textColor="#fff"/>
+                <Button
+                    android:layout_margin="10dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Authors"
+                    android:background="@drawable/button_tag"
+                    android:textColor="#fff"/>
+                <Button
+                    android:layout_margin="10dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Popular"
+                    android:background="@drawable/button_tag"
+                    android:textColor="#fff"/>
+
+            </LinearLayout>
+
+        </HorizontalScrollView>
+
+        <!--end of the tags section-->
+
+
+
+
+
+    </LinearLayout>
+    <!--End of the main container-->
+
+
+</ScrollView>
