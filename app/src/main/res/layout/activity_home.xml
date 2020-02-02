@@ -159,10 +159,16 @@
             </LinearLayout>
 
         </HorizontalScrollView>
-
         <!--end of the tags section-->
 
+        <!--start of the new items section-->
+        <android.support.v7.widget.RecyclerView
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="400dp">
 
+        </android.support.v7.widget.RecyclerView>
+        <!--start of the new items section-->
 
 
 
