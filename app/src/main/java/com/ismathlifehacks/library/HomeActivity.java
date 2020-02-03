@@ -62,20 +62,20 @@ public class HomeActivity extends AppCompatActivity {
         List<Author> authors=new ArrayList<>() ;
 
         Author a =new Author();
-        a.setCover_url("upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Book_collection.jpg/24px-Book_collection.jpg ");
+        a.setCover_url("upload.wikimedia.org/wikipedia/commons/thumb/5/55/James_Dashner_%2814595088277%29.jpg/220px-James_Dashner_%2814595088277%29.jpg");
         a.setName("author a");
         a.setBirth_date("Book a");
         authors.add(a);
 
 
         Author c =new Author();
-        c.setCover_url("upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Book_collection.jpg/24px-Book_collection.jpg ");
+        c.setCover_url("upload.wikimedia.org/wikipedia/commons/thumb/5/55/James_Dashner_%2814595088277%29.jpg/220px-James_Dashner_%2814595088277%29.jpg");
         c.setName("author a");
         c.setBirth_date("Book a");
         authors.add(c);
 
         Author b =new Author();
-        b.setCover_url("upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Book_collection.jpg/24px-Book_collection.jpg ");
+        b.setCover_url("upload.wikimedia.org/wikipedia/commons/thumb/5/55/James_Dashner_%2814595088277%29.jpg/220px-James_Dashner_%2814595088277%29.jpg");
         b.setName("author a");
         b.setBirth_date("Book a");
         authors.add(b);

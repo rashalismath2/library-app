@@ -15,9 +15,12 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.ismathlifehacks.library.Model.Author;
 import com.ismathlifehacks.library.Model.Book;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AuthorsRecyclerViewAdapter extends RecyclerView.Adapter<AuthorsRecyclerViewAdapter.ViewHolder> {
 
@@ -40,9 +43,8 @@ public class AuthorsRecyclerViewAdapter extends RecyclerView.Adapter<AuthorsRecy
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         final Author author=authors.get(i);
-        Glide.with(context)
-                .asBitmap()
-                .load(author.getCover_url())
+        Picasso.get()
+                .load("https://"+author.getCover_url())
                 .into(viewHolder.cover);
 
         viewHolder.name.setText(author.getName());

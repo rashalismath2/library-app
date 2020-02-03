@@ -70,6 +70,7 @@
         android:layout_height="40dp"
         android:background="@drawable/google_loign" />
     <TextView
+        android:onClick="startSignupActivity"
         android:textAlignment="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

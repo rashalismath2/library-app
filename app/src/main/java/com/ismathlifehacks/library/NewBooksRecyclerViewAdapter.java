@@ -14,8 +14,11 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.ismathlifehacks.library.Model.Book;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class NewBooksRecyclerViewAdapter extends RecyclerView.Adapter<NewBooksRecyclerViewAdapter.ViewHolder> {
 
@@ -38,8 +41,7 @@ public class NewBooksRecyclerViewAdapter extends RecyclerView.Adapter<NewBooksRe
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         final Book book=books.get(i);
-        Glide.with(context)
-                .asBitmap()
+        Picasso.get()
                 .load(book.getUrl())
                 .into(viewHolder.cover);
 
