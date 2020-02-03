@@ -41,6 +41,7 @@ public class AuthorsRecyclerViewAdapter extends RecyclerView.Adapter<AuthorsRecy
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         final Author author=authors.get(i);
         Glide.with(context)
+                .asBitmap()
                 .load(author.getCover_url())
                 .into(viewHolder.cover);
 

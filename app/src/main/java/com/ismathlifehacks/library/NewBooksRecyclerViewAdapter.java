@@ -39,6 +39,7 @@ public class NewBooksRecyclerViewAdapter extends RecyclerView.Adapter<NewBooksRe
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         final Book book=books.get(i);
         Glide.with(context)
+                .asBitmap()
                 .load(book.getUrl())
                 .into(viewHolder.cover);
 
