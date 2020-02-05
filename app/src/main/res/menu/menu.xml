@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation-view"
+    >
+        <item android:title="Settings">
+            <menu>
+                <item android:title="logout" android:icon="@drawable/ic_logout"  android:id="@+id/btn_logout" />
+            </menu>
+        </item>
+</menu>

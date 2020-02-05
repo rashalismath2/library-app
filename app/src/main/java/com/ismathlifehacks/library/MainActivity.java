@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.ismathlifehacks.library.Entity.User;
@@ -48,10 +49,11 @@ public class MainActivity extends AppCompatActivity {
     public void authCheck(){
         UserViewModel user=ViewModelProviders.of(this).get(UserViewModel.class);
         User authUser=user.getUser();
-
         if(authUser!=null){
+
             Intent mainActivity=new Intent(getApplicationContext(),HomeActivity.class);
             startActivity(mainActivity);
+            finish();
         }
 
     }
