@@ -21,7 +21,7 @@
         </activity>
         <activity android:name=".LoginActivity"  android:launchMode="singleTask"/>
         <activity android:name=".SignupActivity" android:launchMode="singleTask"/>
-        <activity android:name=".HomeActivity"></activity>
+        <activity android:name=".HomeActivity" android:launchMode="singleTask"></activity>
     </application>
 
 </manifest>

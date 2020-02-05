@@ -34,6 +34,7 @@
         android:layout_height="wrap_content">
 
         <EditText
+            android:id="@+id/txtfirst_name"
             android:layout_gravity="start"
             android:layout_width="120dp"
             android:layout_height="50dp"
@@ -44,6 +45,7 @@
             android:backgroundTint="@color/colorAccent"
             android:textColor="#fff"/>
         <EditText
+            android:id="@+id/txtlast_name"
             android:layout_marginEnd="0dp"
             android:layout_width="120dp"
             android:layout_height="50dp"
@@ -57,6 +59,7 @@
     </LinearLayout>
 
     <EditText
+        android:id="@+id/txtemail"
         android:inputType="textEmailAddress"
         android:layout_gravity="center"
         android:layout_width="250dp"
@@ -68,6 +71,7 @@
         android:backgroundTint="@color/colorAccent"
         android:textColor="#fff"/>
     <EditText
+        android:id="@+id/txtpassword"
         android:inputType="textPassword"
         android:layout_gravity="center"
         android:layout_width="250dp"
@@ -80,6 +84,7 @@
         android:textColor="#fff"/>
 
     <Button
+        android:onClick="userSignup"
         android:layout_gravity="center"
         android:layout_width="250dp"
         android:layout_height="40dp"

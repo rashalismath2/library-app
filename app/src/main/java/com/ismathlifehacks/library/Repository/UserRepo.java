@@ -9,12 +9,12 @@ import com.ismathlifehacks.library.Entity.User;
 
 public class UserRepo {
     private UserDAO userDAO;
+    private User user;
 
     public User getUser() {
         return user;
     }
 
-    private User user;
 
     public UserRepo(Application application) {
         Lite db=Lite.getInstance(application);
@@ -28,6 +28,8 @@ public class UserRepo {
     public void  delete(User user){
         new DeleteUserAsyncTask(userDAO).execute(user);
     }
+
+    public void deleteAllUsers() {new DeleteAllUsersAsyncTask(userDAO).execute();   }
 
     private class InsertUserAsyncTask extends AsyncTask<User, Void, Void> {
         private UserDAO userDAO;
@@ -53,6 +55,20 @@ public class UserRepo {
         @Override
         protected Void doInBackground(User... users) {
             userDAO.delete(users[0]);
+            return null;
+        }
+    }
+
+    private class DeleteAllUsersAsyncTask extends AsyncTask<Void,Void,Void>{
+        private UserDAO userDAO;
+
+        public DeleteAllUsersAsyncTask(UserDAO userDAO) {
+            this.userDAO = userDAO;
+        }
+
+        @Override
+        protected Void doInBackground(Void...voids) {
+            userDAO.deleteAllUsers();
             return null;
         }
     }

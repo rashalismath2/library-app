@@ -18,10 +18,17 @@ public class UserViewModel extends AndroidViewModel {
         user=userRepo.getUser();
     }
 
+    public User getUser(){
+        return this.user;
+    }
+
     public void insert(User user){
         userRepo.insert(user);
     }
     public void delete(User user){
         userRepo.delete(user);
+    }
+    public void deleteAllUsers(){
+        userRepo.deleteAllUsers();
     }
 }

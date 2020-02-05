@@ -8,6 +8,8 @@ import android.arch.persistence.room.Update;
 
 import com.ismathlifehacks.library.Entity.User;
 
+import java.util.List;
+
 @Dao
 public interface UserDAO {
 
@@ -19,4 +21,9 @@ public interface UserDAO {
     void delete(User user);
     @Query("select * from tbl_user limit 1")
     User getUser();
+
+    @Query("delete from tbl_user")
+    void deleteAllUsers();
+
+
 }
