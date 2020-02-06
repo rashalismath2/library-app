@@ -24,29 +24,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Welcome to Ma's Library"
-        android:layout_marginBottom="15dp"/>
+        android:layout_marginBottom="75dp"/>
     <Button
         android:onClick="startloginActivity"
         android:layout_gravity="center"
-        android:layout_width="250dp"
-        android:layout_height="50dp"
+        android:layout_width="220dp"
+        android:layout_height="30dp"
         android:text="Login"
         android:textColor="#fff"
         android:layout_marginBottom="8dp"
         android:background="@color/colorAccent"
         />
-    <Button
-        android:layout_marginBottom="8dp"
-        android:layout_gravity="center"
-        android:layout_width="250dp"
-        android:layout_height="50dp"
-        android:background="@drawable/facebook_loign"/>
-    <Button
-        android:layout_marginBottom="8dp"
-        android:layout_gravity="center"
-        android:layout_width="250dp"
-        android:layout_height="50dp"
-        android:background="@drawable/google_loign" />
+
     <TextView
         android:onClick="startSignup"
         android:textAlignment="center"

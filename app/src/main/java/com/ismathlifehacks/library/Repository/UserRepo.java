@@ -19,7 +19,22 @@ public class UserRepo {
     public UserRepo(Application application) {
         Lite db=Lite.getInstance(application);
         userDAO=db.userDAO();
-        user=userDAO.getUser();
+        this.user=new User();
+        new GetUserAsyncTask(userDAO).execute(user);
+    }
+
+    private class GetUserAsyncTask extends AsyncTask<User, Void, Void> {
+        private UserDAO userDAO;
+
+        public GetUserAsyncTask(UserDAO userDAO) {
+            this.userDAO = userDAO;
+        }
+
+        @Override
+        protected Void doInBackground(User... users) {
+            users[0]=userDAO.getUser();
+            return null;
+        }
     }
 
     public void  insert(User user){

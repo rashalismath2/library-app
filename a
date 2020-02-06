@@ -1,0 +1,53 @@
+[33mcommit eeb8624155294ebd7ef6c905aab70e0748e53c47[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m)[m
+Author: rashalismath2 <rashalismath@gmail.com>
+Date:   Wed Feb 5 17:23:09 2020 +0530
+
+    navigation drawer and logout function added
+
+[33mcommit 186da56e2c3b96c55488a4e8f5d733d611cac5bd[m
+Author: rashalismath2 <rashalismath@gmail.com>
+Date:   Wed Feb 5 13:41:17 2020 +0530
+
+    signup works
+
+[33mcommit 4904e2d89b57b754cd1596d6ed52a31654b54c96[m
+Author: rashalismath2 <rashalismath@gmail.com>
+Date:   Mon Feb 3 17:21:41 2020 +0530
+
+    mvvm added for user
+
+[33mcommit 663cd257238af27a9a9fa96f8051b39589434e6f[m
+Author: rashalismath2 <rashalismath@gmail.com>
+Date:   Mon Feb 3 16:37:50 2020 +0530
+
+    picasso library added
+
+[33mcommit 654a3b1d017f41535c50f91bb6070a1cb836760b[m
+Author: rashalismath2 <rashalismath@gmail.com>
+Date:   Mon Feb 3 15:51:01 2020 +0530
+
+    circular image library added
+
+[33mcommit e6da9fc85f7ddd8b9b8e1fa6e256da306448f237[m
+Author: rashalismath2 <rashalismath@gmail.com>
+Date:   Mon Feb 3 15:47:56 2020 +0530
+
+    recycler view for books and authors added in home activity
+
+[33mcommit cfbfa1d65188865280556ec22d1ded2a59f65030[m
+Author: rashalismath2 <rashalismath@gmail.com>
+Date:   Sun Feb 2 12:19:23 2020 +0530
+
+    Glide library added
+
+[33mcommit 8d38766e771f070b86ab16bd30e09132eedcdd3c[m[33m ([m[1;31morigin/master[m[33m)[m
+Author: rashalismath2 <rashalismath@gmail.com>
+Date:   Sun Feb 2 11:58:19 2020 +0530
+
+    recycler view for new items added
+
+[33mcommit f570f74c86ad04a27df2f9c5f73917cd055ccc69[m
+Author: rashalismath2 <rashalismath@gmail.com>
+Date:   Fri Jan 31 14:57:32 2020 +0530
+
+    first commit

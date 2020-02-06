@@ -11,6 +11,16 @@ public class User implements Serializable {
     private int id;
 
     private String name;
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
+    }
+
+    private String img;
     private String first_name;
     private String last_name;
     private String api_token;

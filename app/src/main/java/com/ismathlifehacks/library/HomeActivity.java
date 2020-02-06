@@ -1,7 +1,9 @@
 package com.ismathlifehacks.library;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -11,22 +13,42 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.ismathlifehacks.library.Entity.User;
 import com.ismathlifehacks.library.Model.Author;
 import com.ismathlifehacks.library.Model.Book;
 import com.ismathlifehacks.library.ViewModel.UserViewModel;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout drawer;
+    private GoogleSignInClient mGoogleSignInClient;
+    private RequestQueue requestQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,10 +66,111 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         if(user!=null){
             new saveUser(user).execute();
         }
+        requestQueue=Volley.newRequestQueue(this);
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         CreateNewItemRecyclerView();
         CreateAuthorItemRecyclerView();
+        if(getGoogleInfos()!=null){
+            new saveUser(getGoogleInfos()).execute();
+        }
     }
+
+
+    public User getGoogleInfos(){
+        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
+        if (acct != null) {
+            String personName = acct.getDisplayName();
+            String personGivenName = acct.getGivenName();
+            String personEmail = acct.getEmail();
+            Uri personPhoto = acct.getPhotoUrl();
+
+            User user=new User();
+            user.setEmail(personEmail);
+            user.setFirst_name(personGivenName);
+            user.setLast_name(personName);
+            user.setImg(personPhoto.toString());
+//            user.setApi_token(acct.getIdToken());
+            signup(user,"password",this);
+            login(user,"password");
+            return  user;
+        }
+        else return null;
+    }
+    public void signup(final User user, final String password,final Context context){
+
+        Context contex=context;
+        String url="http://192.168.8.100:1010/auth/signup";
+
+        StringRequest req=new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("resErr", String.valueOf(error));
+            }
+        }){
+            protected Map<String,String> getParams(){
+                Map<String,String> params=new HashMap<String,String>();
+                params.put("email",user.getEmail());
+                params.put("first_name",user.getFirst_name());
+                params.put("last_name",user.getLast_name());
+                params.put("password",password);
+                if(user.getImg()!=null){params.put("img",user.getImg());}
+                else{
+                    params.put("img","");
+                }
+
+                return  params;
+            }
+        };
+        requestQueue.add(req);
+
+    }
+
+    //login request
+    public void login(final User user,final String password){
+        final String[] token = new String[1];
+        String url="http://192.168.8.100:1010/auth/login";
+
+        StringRequest req=new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject res=new JSONObject(response);
+                    user.setApi_token(res.getString("api_token"));
+
+                } catch (JSONException e) {
+                    Log.d("resErr", String.valueOf(e));
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("resErr", String.valueOf(error));
+            }
+        }){
+            protected Map<String,String> getParams(){
+                Map<String,String> params=new HashMap<String,String>();
+                params.put("email",user.getEmail());
+                params.put("password",password);
+
+                return  params;
+            }
+        };
+        requestQueue.add(req);
+
+    }
+
+
 
     //save user to lite database
     public void saveUserToDb(User user){
@@ -81,16 +204,27 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         switch (menuItem.getItemId()){
             case R.id.btn_logout:
                 drawer.closeDrawer(Gravity.START);
-                new deleteUser().execute();
-                Intent main=new Intent(this,MainActivity.class);
-                startActivity(main);
-                finish();
+
+                    mGoogleSignInClient.signOut()
+                            .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    callmain();
+                                }
+                            });
+
                 break;
         }
 
         return true;
     }
 
+    public void callmain(){
+        deleteUserToLogout();
+        Intent login=new Intent(this,LoginActivity.class);
+        startActivity(login);
+        finish();
+    }
 
     public class saveUser extends AsyncTask<Void,Void,Void> {
         User user;
@@ -108,6 +242,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         @Override
         protected Void doInBackground(Void... voids) {
+
             deleteUserToLogout();
             return null;
         }

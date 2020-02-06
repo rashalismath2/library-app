@@ -8,7 +8,7 @@ import android.content.Context;
 import com.ismathlifehacks.library.DAO.UserDAO;
 import com.ismathlifehacks.library.Entity.User;
 
-@Database(entities = {User.class},version = 1)
+@Database(entities = {User.class},version = 2)
 public abstract class Lite extends RoomDatabase {
 
     private static Lite instance;
@@ -18,6 +18,7 @@ public abstract class Lite extends RoomDatabase {
 
         if(instance==null){
             instance=Room.databaseBuilder(context.getApplicationContext(),Lite.class, "DBLite")
+                    .fallbackToDestructiveMigration()
                     .build();
         }
         return instance;
