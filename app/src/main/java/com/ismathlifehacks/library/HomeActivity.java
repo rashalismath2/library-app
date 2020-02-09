@@ -23,6 +23,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -36,6 +37,7 @@ import com.ismathlifehacks.library.Model.Author;
 import com.ismathlifehacks.library.Model.Book;
 import com.ismathlifehacks.library.ViewModel.UserViewModel;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -49,6 +51,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawer;
     private GoogleSignInClient mGoogleSignInClient;
     private RequestQueue requestQueue;
+    private User user;
+    private List<Book> books;
+    RecyclerView newBooksRecyclerView;
+    NewBooksRecyclerViewAdapter newItemsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +67,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         myNav.setNavigationItemSelectedListener(this);
 
         Intent i=getIntent();
-        User user= (User) i.getSerializableExtra("user");
+        user= (User) i.getSerializableExtra("user");
 
         if(user!=null){
             new saveUser(user).execute();
@@ -73,13 +79,21 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        CreateNewItemRecyclerView();
-        CreateAuthorItemRecyclerView();
         if(getGoogleInfos()!=null){
             new saveUser(getGoogleInfos()).execute();
         }
+
+        CreateNewItemRecyclerView();
+
+        CreateAuthorItemRecyclerView();
+
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+    }
 
     public User getGoogleInfos(){
         GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
@@ -89,7 +103,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             String personEmail = acct.getEmail();
             Uri personPhoto = acct.getPhotoUrl();
 
-            User user=new User();
+            user=new User();
             user.setEmail(personEmail);
             user.setFirst_name(personGivenName);
             user.setLast_name(personName);
@@ -137,7 +151,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     //login request
     public void login(final User user,final String password){
-        final String[] token = new String[1];
         String url="http://192.168.8.100:1010/auth/login";
 
         StringRequest req=new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
@@ -145,7 +158,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             public void onResponse(String response) {
                 try {
                     JSONObject res=new JSONObject(response);
+
                     user.setApi_token(res.getString("api_token"));
+                    new CreateNewBooksItems(user).execute();
 
                 } catch (JSONException e) {
                     Log.d("resErr", String.valueOf(e));
@@ -250,39 +265,64 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
     public void CreateNewItemRecyclerView(){
-        List<Book> books=new ArrayList<>() ;
+        books=new ArrayList<>() ;
 
-        Book a =new Book();
-        a.setUrl("https://via.placeholder.com/150");
-        a.setAuthor("author a");
-        a.setTitle("Book a");
-        books.add(a);
+        newBooksRecyclerView=findViewById(R.id.new_books_recyclerview);
+        newItemsAdapter=new NewBooksRecyclerViewAdapter(this);
+        newItemsAdapter.setItems(books);
+        newBooksRecyclerView.setAdapter(newItemsAdapter);
+        newBooksRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
+        newBooksRecyclerView.setHasFixedSize(true);
+    }
 
-        Book b =new Book();
-        b.setUrl("https://via.placeholder.com/150");
-        b.setAuthor("author b");
-        b.setTitle("Book b");
-        books.add(b);
+    public class CreateNewBooksItems extends AsyncTask<Void,Void,Void>{
+        User user;
+        public CreateNewBooksItems(User user) {
+            this.user = user;
+        }
 
-        Book c =new Book();
-        c.setUrl("https://via.placeholder.com/150");
-        c.setAuthor("author c");
-        c.setTitle("Book c");
-        books.add(c);
+        @Override
+        protected Void doInBackground(Void... voids) {
 
-        Book d =new Book();
-        d.setUrl("https://via.placeholder.com/150");
-        d.setAuthor("author d");
-        d.setTitle("Book d");
-        books.add(d);
+             String url="http://192.168.8.100:1010/book?count=10&&api_token="+user.getApi_token();
 
-        RecyclerView rc=findViewById(R.id.new_books_recyclerview);
-        NewBooksRecyclerViewAdapter adapter=new NewBooksRecyclerViewAdapter();
-        adapter.setItems(books,this);
-        rc.setAdapter(adapter);
-        rc.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
-        rc.setHasFixedSize(true);
+             JsonObjectRequest request=new JsonObjectRequest(
+                     Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                 @Override
+                 public void onResponse(JSONObject response) {
+                     try {
+                         List<Book> booklist=new ArrayList<Book>();
+                         JSONArray books= response.getJSONArray("data");
 
+                         for (int i=0;i<books.length();i++){
+                             JSONObject book=books.getJSONObject(i);
+                             Book b=new Book();
+                             b.setTitle(book.getString("title"));
+                             b.setUrl(book.getString("cover_url"));
+                             b.setId(book.getInt("id"));
+                             b.setAuthor(book.getString("author_id"));
+                             b.setTag(book.getString("tag"));
+                             b.setPublished(book.getInt("publication_year"));
+                             b.setRatings(book.getInt("rating_5"));
+                             booklist.add(b);
+                         }
+                         newItemsAdapter.setItems(booklist);
+
+                     } catch (JSONException e) {
+                         e.printStackTrace();
+                     }
+                     Log.i("books",response.toString());
+                 }
+             }, new Response.ErrorListener() {
+                 @Override
+                 public void onErrorResponse(VolleyError error) {
+
+                 }
+             }
+             );
+             requestQueue.add(request);
+            return null;
+        }
     }
 
     public void CreateAuthorItemRecyclerView(){

@@ -1,11 +1,45 @@
 package com.ismathlifehacks.library.Model;
 
-public class Book {
+import java.io.Serializable;
+
+public class Book implements Serializable {
 
     private String title;
     private String author;
     private int id;
     private String description;
+    private String url;
+
+    public int getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(int ratings) {
+        this.ratings = ratings;
+    }
+
+    private int ratings;
+
+    public int getPublished() {
+        return published;
+    }
+
+    public void setPublished(int published) {
+        this.published = published;
+    }
+
+    private int published;
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
+
+    private String tag;
+
 
     public String getUrl() {
         return url;
@@ -14,9 +48,6 @@ public class Book {
     public void setUrl(String url) {
         this.url = url;
     }
-
-    private String url;
-
 
     public String getTitle() {
         return title;

@@ -1,6 +1,7 @@
 package com.ismathlifehacks.library;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -25,9 +26,13 @@ public class NewBooksRecyclerViewAdapter extends RecyclerView.Adapter<NewBooksRe
     private List<Book> books;
     private Context context;
 
-    public void setItems(List<Book> books,Context context){
+    public void setItems(List<Book> books){
         this.books = books;
-        this.context =context;
+        notifyDataSetChanged();
+    }
+
+    public NewBooksRecyclerViewAdapter(Context context) {
+        this.context = context;
     }
 
     @NonNull
@@ -51,11 +56,14 @@ public class NewBooksRecyclerViewAdapter extends RecyclerView.Adapter<NewBooksRe
         viewHolder.parent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(view.getContext(),book.getTitle(),Toast.LENGTH_SHORT).show();;
+                Intent bookActivity=new Intent(context,BookActivity.class);
+                bookActivity.putExtra("Book",book);
+                context.startActivity(bookActivity);
             }
         });
 
     }
+
 
     @Override
     public int getItemCount() {
