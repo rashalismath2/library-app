@@ -1,40 +1,31 @@
 package com.ismathlifehacks.library.Fragments;
 
-import android.content.Context;
-import android.net.Uri;
+import android.media.audiofx.DynamicsProcessing;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.TextView;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
+import com.google.android.youtube.player.YouTubeBaseActivity;
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubePlayer;
+import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 import com.ismathlifehacks.library.Model.Book;
 import com.ismathlifehacks.library.R;
+import com.ismathlifehacks.library.Youtubeconfig;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
+import java.util.ArrayList;
 
 
 public class BookReviewFragment extends Fragment {
 
-    WebView webView;
+    private YouTubePlayerSupportFragment youTubePlayerFragment;
+    private ArrayList<String> youtubeVideoArrayList;
+    private YouTubePlayer youTubePlayer;
+
     private Book book;
-    private String url="https://www.googleapis.com/books/v1/volumes?q=";
-    private RequestQueue mQueue;
 
     public BookReviewFragment() {
         // Required empty public constructor
@@ -45,65 +36,46 @@ public class BookReviewFragment extends Fragment {
     }
 
 
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mQueue=Volley.newRequestQueue(getContext());
-        parseData(book.getTitle(),url);
+        initializeYoutubePlayer();
     }
 
-    public void parseData(String title,String urls){
-        String encoded= null;
-        try {
-            urls = urls+URLEncoder.encode(title,"UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        url = urls+encoded;
-
-        JsonObjectRequest request=new JsonObjectRequest(Request.Method.GET, urls, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            JSONArray array=response.getJSONArray("items");
-                            JSONObject object=array.getJSONObject(0);
-                            JSONObject voulumeObject=object.getJSONObject("volumeInfo");
-
-                            String link=voulumeObject.getString("previewLink");
-                            webView.loadUrl(link);
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                        Log.i("response from google",response.toString());
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.i("response from google",error.toString());
-                    }
-                }
-        );
-
-        mQueue.add(request);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_book_review, container, false);
-
-
-        webView = view.findViewById(R.id.book_webView);
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
-
-
         return view;
+    }
+
+    private void initializeYoutubePlayer() {
+
+
+        youTubePlayerFragment = (YouTubePlayerSupportFragment) getFragmentManager()
+                .findFragmentById(R.id.youtube_player_fragment);
+
+        if (youTubePlayerFragment == null)
+            return;
+
+        youTubePlayerFragment.initialize(Youtubeconfig.YOUTUBE_API_KEY, new YouTubePlayer.OnInitializedListener() {
+
+            @Override
+            public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer player,
+                                                boolean wasRestored) {
+                if (!wasRestored) {
+                    youTubePlayer = player;
+                    //set the player style default
+                    youTubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT);
+                    youTubePlayer.loadVideo(book.getReview_id());
+                }
+            }
+
+            @Override
+            public void onInitializationFailure(YouTubePlayer.Provider arg0, YouTubeInitializationResult arg1) {
+                //print or show error if initialization failed
+                Log.e("youtube err", "Youtube Player View initialization failed");
+            }
+        });
     }
 
 

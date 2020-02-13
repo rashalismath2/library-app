@@ -63,8 +63,8 @@ public class BookDetailsFragment extends Fragment {
                             String desc=voulumeObject.getString("description");
                             description.setText(desc);
 
-                            int pagecount=voulumeObject.getInt("pageCount");
-                            pageCount.setText(pagecount);
+//                            int pagecount=voulumeObject.getInt("pageCount");
+//                            pageCount.setText(pagecount);
 
 
                         } catch (JSONException e) {

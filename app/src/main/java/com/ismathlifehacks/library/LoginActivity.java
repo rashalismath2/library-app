@@ -101,7 +101,7 @@ public class LoginActivity extends AppCompatActivity {
     //login request
     public void login(final String email, final String password,final Context context){
         final String[] token = new String[1];
-        String url="http://192.168.8.100:1010/auth/login";
+        String url="http://192.168.8.101:1010/auth/login";
 
         StringRequest req=new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override

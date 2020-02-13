@@ -118,7 +118,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     public void signup(final User user, final String password,final Context context){
 
         Context contex=context;
-        String url="http://192.168.8.100:1010/auth/signup";
+        String url="http://192.168.8.101:1010/auth/signup";
 
         StringRequest req=new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
@@ -151,7 +151,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     //login request
     public void login(final User user,final String password){
-        String url="http://192.168.8.100:1010/auth/login";
+        String url="http://192.168.8.101:1010/auth/login";
 
         StringRequest req=new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
@@ -229,6 +229,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                             });
 
                 break;
+
+            case R.id.btnLocation:
+                drawer.closeDrawer(Gravity.START);
+                Intent map=new Intent(this,MapsActivity.class);
+                startActivity(map);
+
+                break;
         }
 
         return true;
@@ -284,7 +291,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         @Override
         protected Void doInBackground(Void... voids) {
 
-             String url="http://192.168.8.100:1010/book?count=10&&api_token="+user.getApi_token();
+             String url="http://192.168.8.101:1010/book?count=10&&api_token="+user.getApi_token();
 
              JsonObjectRequest request=new JsonObjectRequest(
                      Request.Method.GET, url, null, new Response.Listener<JSONObject>() {

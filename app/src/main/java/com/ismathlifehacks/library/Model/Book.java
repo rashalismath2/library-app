@@ -10,6 +10,16 @@ public class Book implements Serializable {
     private String description;
     private String url;
 
+    public String getReview_id() {
+        return review_id;
+    }
+
+    public void setReview_id(String review_id) {
+        this.review_id = review_id;
+    }
+
+    private String review_id="fEzuYrBo6fo";
+
     public int getRatings() {
         return ratings;
     }
