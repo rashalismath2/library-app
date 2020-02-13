@@ -37,8 +37,8 @@ public class UserRepo {
         }
     }
 
-    public void  insert(User user){
-        new InsertUserAsyncTask(userDAO).execute(user);
+    public void  insert(User userr){
+        new InsertUserAsyncTask(userDAO).execute(userr);
     }
     public void  delete(User user){
         new DeleteUserAsyncTask(userDAO).execute(user);

@@ -1,6 +1,8 @@
 package com.ismathlifehacks.library.Model;
 
-public class Author {
+import java.io.Serializable;
+
+public class Author implements Serializable {
     private int id;
     private String name;
     private String nationality;

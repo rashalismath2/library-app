@@ -56,6 +56,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     RecyclerView newBooksRecyclerView;
     NewBooksRecyclerViewAdapter newItemsAdapter;
 
+    RecyclerView authorRecuclerView;
+    AuthorsRecyclerViewAdapter authorAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +72,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         Intent i=getIntent();
         user= (User) i.getSerializableExtra("user");
 
+
         if(user!=null){
+            CreateNewItemRecyclerView();
+            CreateAuthorItemRecyclerView();
+
+            new CreateNewBooksItems(user).execute();
+            new CreateAuthors(user).execute();
             new saveUser(user).execute();
         }
         requestQueue=Volley.newRequestQueue(this);
@@ -79,14 +88,15 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        if(getGoogleInfos()!=null){
-            new saveUser(getGoogleInfos()).execute();
+
+        if(user==null){
+            user=getGoogleInfos();
+            if(user!=null){
+                CreateNewItemRecyclerView();
+                CreateAuthorItemRecyclerView();
+                new saveUser(user).execute();
+            }
         }
-
-        CreateNewItemRecyclerView();
-
-        CreateAuthorItemRecyclerView();
-
     }
 
     @Override
@@ -161,6 +171,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
                     user.setApi_token(res.getString("api_token"));
                     new CreateNewBooksItems(user).execute();
+                    new CreateAuthors(user).execute();
 
                 } catch (JSONException e) {
                     Log.d("resErr", String.valueOf(e));
@@ -264,7 +275,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         @Override
         protected Void doInBackground(Void... voids) {
-
             deleteUserToLogout();
             return null;
         }
@@ -281,6 +291,58 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         newBooksRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
         newBooksRecyclerView.setHasFixedSize(true);
     }
+
+    public class CreateAuthors extends AsyncTask<Void,Void,Void>{
+        User user;
+        public CreateAuthors(User user) {
+            this.user = user;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            String url="http://192.168.8.101:1010/author?count=10&&api_token="+user.getApi_token();
+
+            JsonObjectRequest request=new JsonObjectRequest(
+                    Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    Log.i("Response for authors",response.toString());
+                    try {
+                        List<Author> authorlist=new ArrayList<Author>();
+                        JSONArray books= response.getJSONArray("data");
+
+                        for (int i=0;i<books.length();i++){
+                            JSONObject author=books.getJSONObject(i);
+                            Author a=new Author();
+                            a.setCover_url(author.getString("img"));
+                            a.setId(author.getInt("id"));
+                            a.setNationality(author.getString("nationality"));
+                            a.setName(author.getString("name"));
+                            a.setBirth_date(author.getString("birth"));
+                            a.setDescription(author.getString("description"));
+                            authorlist.add(a);
+                        }
+                        authorAdapter.setAuthors(authorlist);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    Log.i("books",response.toString());
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+            }
+            );
+            requestQueue.add(request);
+            return null;
+        }
+
+    }
+
 
     public class CreateNewBooksItems extends AsyncTask<Void,Void,Void>{
         User user;
@@ -335,32 +397,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     public void CreateAuthorItemRecyclerView(){
         List<Author> authors=new ArrayList<>() ;
 
-        Author a =new Author();
-        a.setCover_url("upload.wikimedia.org/wikipedia/commons/thumb/5/55/James_Dashner_%2814595088277%29.jpg/220px-James_Dashner_%2814595088277%29.jpg");
-        a.setName("author a");
-        a.setBirth_date("Book a");
-        authors.add(a);
-
-
-        Author c =new Author();
-        c.setCover_url("upload.wikimedia.org/wikipedia/commons/thumb/5/55/James_Dashner_%2814595088277%29.jpg/220px-James_Dashner_%2814595088277%29.jpg");
-        c.setName("author a");
-        c.setBirth_date("Book a");
-        authors.add(c);
-
-        Author b =new Author();
-        b.setCover_url("upload.wikimedia.org/wikipedia/commons/thumb/5/55/James_Dashner_%2814595088277%29.jpg/220px-James_Dashner_%2814595088277%29.jpg");
-        b.setName("author a");
-        b.setBirth_date("Book a");
-        authors.add(b);
-
-
-        RecyclerView rc=findViewById(R.id.authors_recyclerview);
-        AuthorsRecyclerViewAdapter adapter=new AuthorsRecyclerViewAdapter();
-        adapter.setAuthors(authors,this);
-        rc.setAdapter(adapter);
-        rc.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
-        rc.setHasFixedSize(true);
+         authorRecuclerView=findViewById(R.id.authors_recyclerview);
+        authorAdapter=new AuthorsRecyclerViewAdapter(this,user);
+        authorAdapter.setAuthors(authors);
+        authorRecuclerView.setAdapter(authorAdapter);
+        authorRecuclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
+        authorRecuclerView.setHasFixedSize(true);
 
     }
 }

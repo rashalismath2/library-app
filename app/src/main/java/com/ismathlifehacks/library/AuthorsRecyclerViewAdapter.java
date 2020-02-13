@@ -1,6 +1,7 @@
 package com.ismathlifehacks.library;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.ismathlifehacks.library.Entity.User;
 import com.ismathlifehacks.library.Model.Author;
 import com.ismathlifehacks.library.Model.Book;
 import com.squareup.picasso.Picasso;
@@ -26,10 +28,16 @@ public class AuthorsRecyclerViewAdapter extends RecyclerView.Adapter<AuthorsRecy
 
     private List<Author> authors;
     private Context context;
+    private User user;
 
-    public void setAuthors(List<Author> authors, Context context){
+    public AuthorsRecyclerViewAdapter(Context context,User user) {
+        this.user=user;
+        this.context = context;
+    }
+
+    public void setAuthors(List<Author> authors){
         this.authors=authors;
-        this.context=context;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -53,7 +61,10 @@ public class AuthorsRecyclerViewAdapter extends RecyclerView.Adapter<AuthorsRecy
         viewHolder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(view.getContext(),author.getName(),Toast.LENGTH_SHORT).show();;
+                Intent authorActivity=new Intent(context,AuthorActivity.class);
+                authorActivity.putExtra("Author",author);
+                authorActivity.putExtra("User",user);
+                context.startActivity(authorActivity);
             }
         });
     }

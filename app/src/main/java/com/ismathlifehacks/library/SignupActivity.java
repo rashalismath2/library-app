@@ -41,7 +41,7 @@ public class SignupActivity extends AppCompatActivity {
     public void signup(final User user, final String password,final Context context){
 
        Context contex=context;
-        String url="http://192.168.8.100:1010/auth/signup";
+        String url="http://192.168.8.101:1010/auth/signup";
 
         StringRequest req=new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
@@ -98,7 +98,7 @@ public class SignupActivity extends AppCompatActivity {
         //login request
     public void login(final User user,final String password){
         final String[] token = new String[1];
-        String url="http://192.168.8.100:1010/auth/login";
+        String url="http://192.168.8.101:1010/auth/login";
 
         StringRequest req=new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
